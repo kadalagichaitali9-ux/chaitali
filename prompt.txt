@@ -1,1 +1,1361 @@
+1) Write a 2d graphics editor using * and  _.
 
+Write functions to draw a circle, rectangle, line, and triangle.
+You should be able to
+      add objects to the picture,
+      delete objects from the picture, and
+       modify objects in the picture.
+Use a 2d array of characters to store the picture.
+Write a function to display the picture.
+complete C program for a simple 2D Graphics Editor using a 2D character array. It supports:
+Draw Rectangle (*)
+Draw Line (_)
+Draw Triangle (*)
+Draw Circle (*)
+Delete an object (replace with space)
+Display Picture
+#include <stdio.h>
+#include <math.h>
+
+#define ROWS 30
+#define COLS 60
+
+char screen[ROWS][COLS];
+
+// Initialize screen
+void initScreen() {
+    int i, j;
+    for(i = 0; i < ROWS; i++)
+        for(j = 0; j < COLS; j++)
+            screen[i][j] = ' ';
+}
+
+// Display screen
+void displayScreen() {
+    int i, j;
+
+    for(i = 0; i < ROWS; i++) {
+        for(j = 0; j < COLS; j++)
+            printf("%c", screen[i][j]);
+        printf("\n");
+    }
+}
+
+// Draw rectangle
+void drawRectangle(int x, int y, int width, int height) {
+    int i, j;
+
+    for(i = y; i < y + height; i++) {
+        for(j = x; j < x + width; j++) {
+            if(i < ROWS && j < COLS)
+                screen[i][j] = '*';
+        }
+    }
+}
+
+// Draw horizontal line
+void drawLine(int x1, int y1, int length) {
+    int i;
+
+    for(i = x1; i < x1 + length && i < COLS; i++)
+        screen[y1][i] = '_';
+}
+
+// Draw triangle
+void drawTriangle(int x, int y, int height) {
+    int i, j;
+
+    for(i = 0; i < height; i++) {
+        for(j = 0; j <= i; j++) {
+            if(y + i < ROWS && x + j < COLS)
+                screen[y + i][x + j] = '*';
+        }
+    }
+}
+
+// Draw circle
+void drawCircle(int xc, int yc, int r) {
+    int x, y;
+
+    for(y = 0; y < ROWS; y++) {
+        for(x = 0; x < COLS; x++) {
+            int d = (x - xc) * (x - xc) +
+                    (y - yc) * (y - yc);
+
+            if(abs(d - r * r) <= r)
+                screen[y][x] = '*';
+        }
+    }
+}
+
+// Delete rectangular area
+void deleteObject(int x, int y, int width, int height) {
+    int i, j;
+
+    for(i = y; i < y + height && i < ROWS; i++) {
+        for(j = x; j < x + width && j < COLS; j++) {
+            screen[i][j] = ' ';
+        }
+    }
+}
+
+int main() {
+    int choice;
+    int x, y, w, h, len, r;
+
+    initScreen();
+
+    do {
+        printf("\n===== 2D GRAPHICS EDITOR =====\n");
+        printf("1. Draw Rectangle\n");
+        printf("2. Draw Line\n");
+        printf("3. Draw Triangle\n");
+        printf("4. Draw Circle\n");
+        printf("5. Delete Object\n");
+        printf("6. Display Picture\n");
+        printf("7. Exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch(choice) {
+
+        case 1:
+            printf("Enter x y width height: ");
+            scanf("%d%d%d%d", &x, &y, &w, &h);
+            drawRectangle(x, y, w, h);
+            break;
+
+        case 2:
+            printf("Enter x y length: ");
+            scanf("%d%d%d", &x, &y, &len);
+            drawLine(x, y, len);
+            break;
+
+        case 3:
+            printf("Enter x y height: ");
+            scanf("%d%d%d", &x, &y, &h);
+            drawTriangle(x, y, h);
+            break;
+
+        case 4:
+            printf("Enter center_x center_y radius: ");
+            scanf("%d%d%d", &x, &y, &r);
+            drawCircle(x, y, r);
+            break;
+
+        case 5:
+            printf("Enter x y width height to delete: ");
+            scanf("%d%d%d%d", &x, &y, &w, &h);
+            deleteObject(x, y, w, h);
+            break;
+
+        case 6:
+            displayScreen();
+            break;
+
+        case 7:
+            printf("Exiting...\n");
+            break;
+
+        default:
+            printf("Invalid Choice!\n");
+        }
+
+    } while(choice != 7);
+
+    return 0;
+}
+
+---------------------1---------------------
+
+2) Give me compile commands to run this in terminal
+
+gcc graphics.c -o graphics -lm
+
+(-lm is needed because the program uses math.h.)
+Run
+Linux / macOS
+Bash
+./graphics
+Windows
+Bash
+graphics
+or
+Bash
+graphics.exe
+If GCC is not installed
+Check:
+Bash
+gcc --version
+Example
+Bash
+gcc graphics.c -o graphics -lm
+./graphics
+
+
+-----------------2-------------------
+
+3) How to push this program to github
+If you've already created a GitHub repository, open the terminal in the folder containing graphics.c and run:
+
+git init
+git add graphics.c
+git commit -m "Added 2D Graphics Editor program"
+git branch -M main
+git remote add origin <your-github-repository-url>
+git push -u origin main
+
+Example:
+
+git remote add origin https://github.com/username/2D-Graphics-Editor.git
+git push -u origin main
+
+If the repository already contains files and you've connected a different remote before, check:
+
+git remote -v
+
+To change the repository:
+
+git remote remove origin
+git remote add origin <new-repository-url>
+git push -u origin main
+
+To verify the upload, visit your repository on [GitHub](https://github.com?utm_source=chatgpt.com) and refresh the page. You should see graphics.c listed there.
+
+If you're using VS Code and have already pushed to another repository before, send a screenshot of:
+
+git remote -v
+
+and I can tell you the exact commands needed.
+
+===============3==============
+
+4)2D-Graphics-Editor/
+│
+├── main.c
+├── graphics.c
+├── graphics.h
+├── README.md
+└── screenshots/
+
+Canvas
+
+Use a 2D character array:
+#define ROWS 30
+#define COLS 60
+
+char canvas[ROWS][COLS];
+void initializeCanvas()
+{
+    for(int i=0;i<ROWS;i++)
+    {
+        for(int j=0;j<COLS;j++)
+            canvas[i][j] = '_';
+    }
+}
+
+void initializeCanvas()
+{
+    for(int i=0;i<ROWS;i++)
+    {
+        for(int j=0;j<COLS;j++)
+            canvas[i][j] = '_';
+    }
+}
+typedef struct
+{
+    int id;
+    int type;      // 1-Line 2-Rectangle 3-Circle 4-Triangle
+
+    int x1,y1;
+    int x2,y2;
+
+    int radius;
+
+} Object;
+Array of objects:
+
+Object objects[100];
+int objectCount = 0;
+
+This allows:
+
+Add Object
+Delete Object
+Modify Object
+Redraw Canvas
+Functions Required
+Display Canvas
+void displayCanvas()
+{
+    for(int i=0;i<ROWS;i++)
+    {
+        for(int j=0;j<COLS;j++)
+            printf("%c ", canvas[i][j]);
+
+        printf("\n");
+    }
+}
+
+==================4================
+
+5)For a 5-mark "Original Complete" submission, your project should satisfy all required features and be organized well. Here's a recommended implementation plan and architecture.
+
+Project Title
+
+Menu-Driven 2D Graphics Editor in C
+
+Objective
+
+Create a graphics editor using a 2D character array as the canvas.
+
+Canvas initially contains _
+Shapes are drawn using *
+User can:
+Add objects
+Delete objects
+Modify objects
+Display the picture
+
+Supported shapes:
+
+Line
+Rectangle
+Circle
+Triangle
+Data Structure Design
+Canvas
+#define ROWS 30
+#define COLS 60
+
+char canvas[ROWS][COLS];
+
+Initialize:
+
+void clearCanvas()
+{
+    for(int i=0;i<ROWS;i++)
+    {
+        for(int j=0;j<COLS;j++)
+        {
+            canvas[i][j] = '_';
+        }
+    }
+}
+Shape Object
+
+Store every object separately.
+
+typedef struct
+{
+    int id;
+    int type;
+
+    int x1,y1;
+    int x2,y2;
+    int x3,y3;
+
+    int radius;
+
+} Shape;
+
+Types:
+
+#define LINE 1
+#define RECTANGLE 2
+#define CIRCLE 3
+#define TRIANGLE 4
+
+Storage:
+
+Shape shapes[100];
+int count = 0;
+Required Functions
+Display Canvas
+void displayCanvas()
+{
+    for(int i=0;i<ROWS;i++)
+    {
+        for(int j=0;j<COLS;j++)
+        {
+            printf("%c ",canvas[i][j]);
+        }
+        printf("\n");
+    }
+}
+Draw Pixel
+
+Utility function:
+
+void setPixel(int x,int y)
+{
+    if(x>=0 && x<ROWS && y>=0 && y<COLS)
+    {
+        canvas[x][y] = '*';
+    }
+}
+Draw Line
+
+Use Bresenham's algorithm.
+
+void drawLine(int x1,int y1,int x2,int y2)
+{
+    int dx = abs(x2-x1);
+    int dy = abs(y2-y1);
+
+    int sx = (x1<x2)?1:-1;
+    int sy = (y1<y2)?1:-1;
+
+    int err = dx-dy;
+
+    while(1)
+    {
+        setPixel(x1,y1);
+
+        if(x1==x2 && y1==y2)
+            break;
+
+        int e2 = 2*err;
+
+        if(e2>-dy)
+        {
+            err -= dy;
+            x1 += sx;
+        }
+
+        if(e2<dx)
+        {
+            err += dx;
+            y1 += sy;
+        }
+    }
+}
+Draw Rectangle
+void drawRectangle(int x,int y,int width,int height)
+{
+    drawLine(x,y,x,y+width);
+
+    drawLine(x+height,y,
+             x+height,y+width);
+
+    drawLine(x,y,
+             x+height,y);
+
+    drawLine(x,y+width,
+             x+height,y+width);
+}
+Draw Circle
+
+Midpoint Circle Algorithm:
+
+void drawCircle(int xc,int yc,int r)
+{
+    int x=0;
+    int y=r;
+    int d=1-r;
+
+    while(x<=y)
+    {
+        setPixel(xc+x,yc+y);
+        setPixel(xc-x,yc+y);
+        setPixel(xc+x,yc-y);
+        setPixel(xc-x,yc-y);
+
+        setPixel(xc+y,yc+x);
+        setPixel(xc-y,yc+x);
+        setPixel(xc+y,yc-x);
+        setPixel(xc-y,yc-x);
+
+        if(d<0)
+            d += 2*x+3;
+        else
+        {
+            d += 2*(x-y)+5;
+            y--;
+        }
+
+        x++;
+    }
+}
+Draw Triangle
+
+Triangle = 3 lines.
+
+void drawTriangle(
+        int x1,int y1,
+        int x2,int y2,
+        int x3,int y3)
+{
+    drawLine(x1,y1,x2,y2);
+    drawLine(x2,y2,x3,y3);
+    drawLine(x3,y3,x1,y1);
+}
+Add Object
+
+Menu:
+
+1. Line
+2. Rectangle
+3. Circle
+4. Triangle
+
+Store object in array:
+
+shapes[count++] = newShape;
+
+After insertion:
+
+redrawCanvas();
+Delete Object
+
+Input object ID.
+
+Search:
+
+for(i=0;i<count;i++)
+{
+    if(shapes[i].id==id)
+    {
+        shapes[i]=shapes[count-1];
+        count--;
+        break;
+    }
+}
+
+Then:
+
+redrawCanvas();
+Modify Object
+
+Search object by ID.
+
+Update coordinates.
+
+Example:
+
+Enter new coordinates:
+
+Then:
+
+redrawCanvas();
+Redraw Canvas
+
+Very important feature.
+
+void redrawCanvas()
+{
+    clearCanvas();
+
+    for(int i=0;i<count;i++)
+    {
+        switch(shapes[i].type)
+        {
+            case LINE:
+                drawLine(...);
+                break;
+
+            case RECTANGLE:
+                drawRectangle(...);
+                break;
+
+            case CIRCLE:
+                drawCircle(...);
+                break;
+
+            case TRIANGLE:
+                drawTriangle(...);
+                break;
+        }
+    }
+}
+Main Menu
+=================================
+      2D GRAPHICS EDITOR
+=================================
+
+1. Add Object
+2. Delete Object
+3. Modify Object
+4. Display Canvas
+5. List Objects
+6. Exit
+
+Enter choice:
+Extra Feature (Recommended)
+List Objects
+ID    Type
+----------------
+1     Rectangle
+2     Circle
+3     Line
+Save Canvas
+saveToFile("picture.txt");
+Load Canvas
+loadFromFile("picture.txt");
+
+These features help demonstrate originality.
+
+Folder Structure
+2D-Graphics-Editor
+│
+├── main.c
+├── graphics.c
+├── graphics.h
+├── README.md
+└── screenshots
+Compilation
+
+Without ncurses:
+
+gcc main.c graphics.c -o editor
+./editor
+
+With ncurses:
+
+gcc main.c graphics.c -lncurses -o editor
+./editor
+GitHub Submission
+Create a repository on GitHub.
+Push code daily:
+git add .
+git commit -m "Added line drawing algorithm"
+git push
+git commit -m "Implemented circle drawing"
+git commit -m "Added modify and delete operations"
+Copy the repository URL and submit it in Moodle.
+
+A project with all four shapes, object storage, add/delete/modify functionality, redraw logic, and a clean menu system should comfortably meet the "Original Complete (5 marks)" rubric.
+
+give stepp by step 
+
+Here's a step-by-step guide to complete the assignment from scratch and maximize your chances of getting 5 marks.
+
+Step 1: Create a GitHub Repository
+Sign in to GitHub
+Click New Repository
+Repository name:
+2D-Graphics-Editor
+Select Public
+Click Create Repository
+Step 2: Create Project Folder
+
+On your computer:
+
+mkdir 2D-Graphics-Editor
+cd 2D-Graphics-Editor
+
+Create files:
+
+touch main.c
+touch graphics.c
+touch graphics.h
+touch README.md
+Step 3: Initialize Git
+
+Inside project folder:
+
+git init
+git add .
+git commit -m "Initial project setup"
+
+Connect to GitHub:
+
+git branch -M main
+git remote add origin YOUR_REPOSITORY_URL
+git push -u origin main
+
+Example:
+
+git remote add origin https://github.com/username/2D-Graphics-Editor.git
+Step 4: Create Canvas
+
+In graphics.h
+
+#define ROWS 30
+#define COLS 60
+
+extern char canvas[ROWS][COLS];
+
+In graphics.c
+
+char canvas[ROWS][COLS];
+
+Create function:
+
+void clearCanvas()
+{
+    for(int i=0;i<ROWS;i++)
+    {
+        for(int j=0;j<COLS;j++)
+        {
+            canvas[i][j] = '_';
+        }
+    }
+}
+Step 5: Create Display Function
+
+In graphics.c
+
+void displayCanvas()
+{
+    for(int i=0;i<ROWS;i++)
+    {
+        for(int j=0;j<COLS;j++)
+        {
+            printf("%c ", canvas[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+Test:
+
+clearCanvas();
+displayCanvas();
+
+You should see a screen full of _.
+
+Step 6: Create Pixel Function
+void setPixel(int x,int y)
+{
+    if(x>=0 && x<ROWS &&
+       y>=0 && y<COLS)
+    {
+        canvas[x][y]='*';
+    }
+}
+
+Test:
+
+setPixel(5,5);
+displayCanvas();
+Step 7: Implement Line Drawing
+
+Create:
+
+void drawLine(int x1,int y1,
+              int x2,int y2)
+
+Use Bresenham algorithm.
+
+Test:
+
+drawLine(2,2,15,20);
+displayCanvas();
+
+Commit:
+
+git add .
+git commit -m "Implemented line drawing"
+git push
+Step 8: Implement Rectangle
+
+Create:
+
+void drawRectangle(int x,
+                   int y,
+                   int width,
+                   int height)
+
+Use four lines.
+
+Test:
+
+drawRectangle(5,5,15,8);
+
+Commit:
+
+git add .
+git commit -m "Added rectangle drawing"
+git push
+Step 9: Implement Circle
+
+Create:
+
+void drawCircle(int xc,
+                int yc,
+                int r)
+
+Use midpoint circle algorithm.
+
+Test:
+
+drawCircle(15,25,7);
+
+Commit:
+
+git add .
+git commit -m "Added circle drawing"
+git push
+Step 10: Implement Triangle
+
+Triangle = 3 lines.
+
+void drawTriangle(
+    int x1,int y1,
+    int x2,int y2,
+    int x3,int y3)
+
+Test:
+
+drawTriangle(5,10,
+             15,5,
+             20,20);
+
+Commit:
+
+git add .
+git commit -m "Added triangle drawing"
+git push
+Step 11: Create Shape Structure
+
+In graphics.h
+
+typedef struct
+{
+    int id;
+    int type;
+
+    int x1,y1;
+    int x2,y2;
+    int x3,y3;
+
+    int radius;
+
+} Shape;
+
+Create:
+
+Shape shapes[100];
+int count = 0;
+Step 12: Add Object Feature
+
+Menu:
+
+1. Add Line
+2. Add Rectangle
+3. Add Circle
+4. Add Triangle
+
+Store every object in array:
+
+shapes[count++] = shape;
+
+Commit:
+
+git add .
+git commit -m "Added object storage"
+git push
+Step 13: Create Redraw Function
+void redrawCanvas()
+{
+    clearCanvas();
+
+    for(int i=0;i<count;i++)
+    {
+        // draw shape again
+    }
+}
+
+Every time:
+
+Add object
+Delete object
+Modify object
+
+Call:
+
+redrawCanvas();
+Step 14: Implement Delete Object
+
+User enters:
+
+Enter ID:
+
+Search array.
+
+Remove shape.
+
+shapes[i] = shapes[count-1];
+count--;
+
+Then:
+
+redrawCanvas();
+
+Commit:
+
+git add .
+git commit -m "Added delete feature"
+git push
+Step 15: Implement Modify Object
+
+User enters:
+
+Enter ID:
+
+Find shape.
+
+Update values.
+
+Call:
+
+redrawCanvas();
+
+Commit:
+
+git add .
+git commit -m "Added modify feature"
+git push
+Step 16: Create Main Menu
+=========================
+2D GRAPHICS EDITOR
+=========================
+
+1. Add Object
+2. Delete Object
+3. Modify Object
+4. Display Canvas
+5. List Objects
+6. Exit
+
+Use:
+
+while(choice != 6)
+{
+    // menu
+}
+Step 17: Add Object Listing
+
+Display:
+
+ID    Type
+---------------
+1     Rectangle
+2     Circle
+3     Line
+
+This makes the project look more complete.
+
+Step 18: Create README.md
+
+Include:
+
+Project Name
+Features
+Algorithms Used
+Compilation Steps
+Screenshots
+
+Example:
+
+gcc main.c graphics.c -o editor
+./editor
+Step 19: Take Screenshots
+
+Run program.
+
+Capture:
+
+Main menu
+Line
+Rectangle
+Circle
+Triangle
+Delete
+Modify
+
+Put them in:
+
+screenshots/
+Step 20: Final Push
+git add .
+git commit -m "Completed graphics editor project"
+git push
+Step 21: Submit
+
+Open your repository on GitHub.
+
+Copy URL:
+
+https://github.com/yourname/2D-Graphics-Editor
+
+Paste it into the Moodle submission text box.
+
+Minimum features needed for 5 marks
+
+✅ 2D character canvas (_)
+✅ Draw line
+✅ Draw rectangle
+✅ Draw circle
+✅ Draw triangle
+✅ Add object
+✅ Delete object
+✅ Modify object
+✅ Display canvas
+✅ GitHub repository with multiple commits/pushes
+✅ README file with instructions and screenshots
+
+You're on the GitHub "Create a new repository" page. Fill it like this:
+
+Repository Owner
+
+Leave it as your GitHub username.
+
+Example:
+
+yourusername
+Repository Name
+
+Use:
+
+2D-Graphics-Editor
+
+or
+=======================*======================
+
+Menu-Driven-2D-Graphics-Editor
+Description
+
+You can write:
+
+Menu-driven 2D Graphics Editor in C using a 2D character array. Supports drawing, modifying and deleting lines, rectangles, circles and triangles.
+Visibility
+
+Choose:
+
+✅ Public
+
+(Usually preferred for college assignments so the instructor can view it.)
+
+Add README
+
+✅ Turn On
+
+Add .gitignore
+
+Choose:
+
+C
+
+from the dropdown.
+
+Add License
+
+You can choose:
+
+MIT License
+
+or leave it blank if your instructor didn't ask for a license.
+
+Final Settings Summary
+Repository Name: 2D-Graphics-Editor
+
+Description:
+Menu-driven 2D Graphics Editor in C using a 2D character array. Supports drawing, modifying and deleting graphical objects.
+
+Visibility:
+Public
+
+README:
+Yes
+
+.gitignore:
+C
+
+License:
+MIT (optional)
+
+==============*============
+
+Then click Create Repository.
+
+After the repository is created, send me a screenshot (or tell me what page you see next), and I'll guide you through uploading your first main.c file and making your first commit.
+
+next what the step
+
+Great. After clicking Create Repository, follow these steps.
+
+Step 1: Copy the Repository URL
+
+On the repository page, click the green Code button and copy the HTTPS URL.
+
+It will look like:
+
+https://github.com/yourusername/2D-Graphics-Editor.git
+Step 2: Create the Project Folder on Your Computer
+
+Open Terminal (Linux/macOS) or Git Bash (Windows):
+
+mkdir 2D-Graphics-Editor
+cd 2D-Graphics-Editor
+
+Create the files:
+
+touch main.c
+touch graphics.c
+touch graphics.h
+
+If you're on Windows Command Prompt:
+
+type nul > main.c
+type nul > graphics.c
+type nul > graphics.h
+Step 3: Add Basic Code
+
+Open main.c and paste:
+
+#include <stdio.h>
+
+int main()
+{
+    printf("2D Graphics Editor\n");
+    return 0;
+}
+
+Save the file.
+
+Step 4: Initialize Git Locally
+
+In the project folder:
+
+git init
+git add .
+git commit -m "Initial project setup"
+Step 5: Connect to GitHub
+
+Replace the URL with your repository URL:
+
+git branch -M main
+git remote add origin https://github.com/yourusername/2D-Graphics-Editor.git
+git push -u origin main
+
+GitHub may ask you to sign in.
+
+Step 6: Verify Upload
+
+Refresh your GitHub repository page.
+
+You should see:
+
+README.md
+main.c
+graphics.c
+graphics.h
+Step 7: Start the Assignment
+
+Next implement the canvas.
+
+In graphics.h:
+
+#define ROWS 30
+#define COLS 60
+
+extern char canvas[ROWS][COLS];
+
+void clearCanvas();
+void displayCanvas();
+
+In graphics.c:
+
+#include <stdio.h>
+#include "graphics.h"
+
+char canvas[ROWS][COLS];
+
+void clearCanvas()
+{
+    for(int i=0;i<ROWS;i++)
+    {
+        for(int j=0;j<COLS;j++)
+        {
+            canvas[i][j] = '_';
+        }
+    }
+}
+
+void displayCanvas()
+{
+    for(int i=0;i<ROWS;i++)
+    {
+        for(int j=0;j<COLS;j++)
+        {
+            printf("%c ", canvas[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+--------------------------------------------
+
+Then commit:
+
+git add .
+git commit -m "Added canvas initialization and display"
+git push
+Step 8: Daily Progress Plan
+
+Day 1:
+
+Create repository
+Canvas
+Display function
+
+Day 2:
+
+Line drawing
+
+Day 3:
+
+Rectangle and Triangle
+
+Day 4:
+
+Circle
+
+Day 5:
+
+Add/Delete/Modify menu
+
+Day 6:
+
+Testing, README, screenshots
+
+This gives you multiple commits and satisfies the "daily push" requirement.
+
+Tell me:
+
+Windows, Linux, or macOS?
+Do you want to code in VS Code?
+
+I'll give the exact next clicks and commands for your setup.
+
+next step
+
+If you've already:
+
+✅ Created the GitHub repository
+✅ Created main.c, graphics.c, graphics.h
+✅ Pushed them to GitHub
+
+then the next step is to implement and test the canvas.
+
+Step 9: Add Function Declarations
+
+Open graphics.h:
+
+#ifndef GRAPHICS_H
+#define GRAPHICS_H
+
+#define ROWS 30
+#define COLS 60
+
+extern char canvas[ROWS][COLS];
+
+void clearCanvas();
+void displayCanvas();
+
+#endif
+
+Save.
+
+Step 10: Implement Canvas Functions
+
+Open graphics.c:
+
+#include <stdio.h>
+#include "graphics.h"
+
+char canvas[ROWS][COLS];
+
+void clearCanvas()
+{
+    for(int i = 0; i < ROWS; i++)
+    {
+        for(int j = 0; j < COLS; j++)
+        {
+            canvas[i][j] = '_';
+        }
+    }
+}
+
+void displayCanvas()
+{
+    for(int i = 0; i < ROWS; i++)
+    {
+        for(int j = 0; j < COLS; j++)
+        {
+            printf("%c ", canvas[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+Save.
+
+Step 11: Test the Canvas
+
+Open main.c:
+
+#include <stdio.h>
+#include "graphics.h"
+
+int main()
+{
+    clearCanvas();
+    displayCanvas();
+
+    return 0;
+}
+
+Save.
+
+Step 12: Compile
+
+In terminal:
+
+gcc main.c graphics.c -o editor
+
+Run:
+
+Linux/macOS
+./editor
+Windows
+editor.exe
+
+You should see many _ characters filling the screen.
+
+Step 13: Commit This Progress
+git add .
+git commit -m "Added canvas initialization and display"
+git push
+Step 14: Next Feature — Draw a Single Pixel
+
+Add to graphics.h:
+
+void setPixel(int x, int y);
+
+Add to graphics.c:
+
+void setPixel(int x, int y)
+{
+    if(x >= 0 && x < ROWS &&
+       y >= 0 && y < COLS)
+    {
+        canvas[x][y] = '*';
+    }
+}
+
+Test in main.c:
+
+clearCanvas();
+
+setPixel(5,5);
+setPixel(5,6);
+setPixel(5,7);
+
+displayCanvas();
+
+Now you should see a few * characters on the canvas.
+
+After that, the next major step will be implementing line drawing, which is the foundation for rectangles and triangles.
